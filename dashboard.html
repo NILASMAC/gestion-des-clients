@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Pressing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Ma Gestion</h1>
+    <button onclick="logout()" class="logout">Sortir</button>
+  </header>
+
+  <section class="card">
+    <h2>Nouvelle Commande</h2>
+    <form id="formCommande" class="form-grid">
+      <input type="text" id="nom" placeholder="Nom client" required>
+      <input type="text" id="telephone" placeholder="Téléphone" required>
+      <input type="text" id="quartier" placeholder="Quartier" required>
+      <select id="typeLavage">
+        <option value="Lavage simple">Lavage simple</option>
+        <option value="Nettoyage Express">Nettoyage Express</option>
+        <option value="Repassage">Repassage uniquement</option>
+      </select>
+      <input type="date" id="dateEntree" required>
+      <input type="date" id="dateRetrait" required>
+      <input type="number" id="kilos" placeholder="Kilos">
+      <input type="text" id="articles" placeholder="Articles (ex: 3 chemises)">
+      <input type="number" id="montant" placeholder="Montant (FCFA)" required>
+      <button type="submit" class="btn-primary">Ajouter</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Statistiques</h2>
+    <div id="stats" class="stat-grid"></div>
+  </section>
+
+  <section class="card">
+    <h2>Commandes</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Prix</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="listeCommandes"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<script type="module" src="dashboard.js"></script>
+</body>
+</html>
