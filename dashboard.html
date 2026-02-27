@@ -1,66 +1,84 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Pressing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pressing Pro - CRM</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Pressing Pro - CRM</h1>
+        <button onclick="logout()">Déconnexion</button>
+    </header>
 
-<div class="container">
+    <main>
+        <section class="stats-container">
+            <div id="stats"></div>
+            <div id="extraStats"></div>
+            <button onclick="relancerInactifs()" style="background:#FF9800; color:white; width:100%; margin-top:10px; padding:10px; border-radius:8px; border:none; font-weight:bold;">
+                📢 Relancer les clients inactifs (+14j)
+            </button>
+        </section>
 
-  <header>
-    <h1>Ma Gestion</h1>
-    <button onclick="logout()" class="logout">Sortir</button>
-  </header>
+        <section class="form-section">
+            <form id="formCommande">
+                <h3>Nouvelle Commande</h3>
+                <input type="text" id="nom" placeholder="Nom complet du client" required>
+                <input type="tel" id="telephone" placeholder="Téléphone (ex: 690000000)" required>
+                <input type="date" id="dateNaissance" title="Date de naissance pour l'âge médian">
+                
+                <input type="text" id="quartier" placeholder="Quartier" required>
 
-  <section class="card">
-    <h2>Nouvelle Commande</h2>
-    <form id="formCommande" class="form-grid">
-      <input type="text" id="nom" placeholder="Nom client" required>
-      <input type="text" id="telephone" placeholder="Téléphone" required>
-      <input type="text" id="quartier" placeholder="Quartier" required>
-      <select id="typeLavage">
-        <option value="Lavage simple">Lavage simple</option>
-        <option value="Nettoyage Express">Nettoyage Express</option>
-        <option value="Repassage">Repassage uniquement</option>
-      </select>
-      <input type="date" id="dateEntree" required>
-      <input type="date" id="dateRetrait" required>
-      <input type="number" id="kilos" placeholder="Kilos">
-      <input type="text" id="articles" placeholder="Articles (ex: 3 chemises)">
-      <input type="number" id="montant" placeholder="Montant (FCFA)" required>
-      <button type="submit" class="btn-primary">Ajouter</button>
-    </form>
-  </section>
+                <select id="typeLavage">
+                    <option value="Lavage Simple">Lavage Simple</option>
+                    <option value="Nettoyage à sec">Nettoyage à sec</option>
+                    <option value="Couette / Couverture">Couette / Couverture</option>
+                    <option value="Repassage">Repassage uniquement</option>
+                </select>
 
-  <section class="card">
-    <h2>Statistiques</h2>
-    <div id="stats" class="stat-grid"></div>
-  </section>
+                <input type="number" id="kilos" placeholder="Poids (Kg)" required>
+                <textarea id="articles" placeholder="Détails (ex: 2 vestes, 1 pantalon...)"></textarea>
+                
+                <div style="display:flex; gap:10px;">
+                    <input type="date" id="dateEntree" required title="Date de dépôt">
+                    <input type="date" id="dateRetrait" required title="Date de retrait prévue">
+                </div>
 
-  <section class="card">
-    <h2>Commandes</h2>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Client</th>
-            <th>Prix</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="listeCommandes"></tbody>
-      </table>
-    </div>
-  </section>
+                <input type="number" id="montant" placeholder="Montant Total (FCFA)" required>
 
-</div>
+                <select id="canalAcquisition">
+                    <option value="Direct">Comment nous a-t-il connu ?</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Bouche-à-oreille">Bouche-à-oreille</option>
+                    <option value="Recommandation">Recommandation d'un ami</option>
+                    <option value="Flyers">Flyers / Affiche</option>
+                </select>
 
-<script type="module" src="dashboard.js"></script>
+                <button type="submit" style="background:#2196F3;">Enregistrer & Analyser</button>
+            </form>
+        </section>
+
+        <section class="table-section">
+            <h3>Suivi des Commandes</h3>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client / Canal</th>
+                            <th>Total</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listeCommandes"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="dashboard.js"></script>
 </body>
 </html>
