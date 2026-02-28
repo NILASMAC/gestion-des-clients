@@ -3,17 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Pressing</title>
+  <title>Dashboard Pressing Pro</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <style>
+    /* --- DESIGN GLOBAL --- */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f7ff;
+      margin: 0;
+      color: #334155;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* --- HEADER --- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #2196F3;
+      padding: 15px 25px;
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    header h1 { margin: 0; font-size: 22px; }
+
+    .logout {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .logout:hover { background: white; color: #2196F3; }
+
+    /* --- CARTES (CARDS) --- */
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #1e293b;
+      border-left: 4px solid #2196F3;
+      padding-left: 12px;
+      margin-bottom: 20px;
+    }
+
+    /* --- FORMULAIRE --- */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #f1f5f9;
+      border-radius: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #f8fafc;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2196F3;
+      background: white;
+    }
+
+    .btn-primary {
+      grid-column: 1 / -1;
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .btn-primary:hover { background: #1976D2; transform: translateY(-2px); }
+
+    /* --- STATISTIQUES --- */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* --- TABLEAU --- */
+    .table-container { overflow-x: auto; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      padding: 15px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #64748b;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+
+    /* --- BOUTONS ACTIONS --- */
+    button.action {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      margin-right: 5px;
+      transition: 0.2s;
+    }
+    .btn-wa { background: #25D366; color: white; }
+    .btn-del { background: #fee2e2; color: #ef4444; }
+
+    /* --- MOBILE OPTIMISATION --- */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 18px; }
+      .card { padding: 15px; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
 
   <header>
-    <h1>Ma Gestion</h1>
+    <h1>🧼 Pressing Pro</h1>
     <button onclick="logout()" class="logout">Sortir</button>
   </header>
 
@@ -28,22 +178,23 @@
         <option value="Nettoyage Express">Nettoyage Express</option>
         <option value="Repassage">Repassage uniquement</option>
       </select>
-      <input type="date" id="dateEntree" required>
-      <input type="date" id="dateRetrait" required>
+      <input type="date" id="dateEntree" required title="Date de dépôt">
+      <input type="date" id="dateRetrait" required title="Date de retrait">
       <input type="number" id="kilos" placeholder="Kilos">
       <input type="text" id="articles" placeholder="Articles (ex: 3 chemises)">
       <input type="number" id="montant" placeholder="Montant (FCFA)" required>
-      <button type="submit" class="btn-primary">Ajouter</button>
+      <button type="submit" class="btn-primary">Enregistrer la Commande</button>
     </form>
   </section>
 
   <section class="card">
-    <h2>Statistiques</h2>
-    <div id="stats" class="stat-grid"></div>
+    <h2>Statistiques d'Activité</h2>
+    <div id="stats" class="stat-grid">
+        </div>
   </section>
 
   <section class="card">
-    <h2>Commandes</h2>
+    <h2>Liste des Commandes</h2>
     <div class="table-container">
       <table>
         <thead>

@@ -25,3 +25,13 @@ window.location.href = "dashboard.html";
 alert("Erreur de connexion");
 });
 });
+
+// Exemple de ce qu'il faut mettre dans ton auth.js
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    window.location.href = "dashboard.html";
+  })
+  .catch((error) => {
+    // Affiche le message d'erreur en rouge
+    document.getElementById('authError').style.display = 'block';
+  });

@@ -3,14 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion Admin - Pressing</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body style="display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+  <title>Connexion Admin - Pressing Pro</title>
+  
+  <style>
+    /* 1. Design de l'arrière-plan */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #c3eaff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
 
-  <div class="card" style="width: 100%; max-width: 400px;">
-    <h1 style="text-align: center; color: #2196F3; margin-bottom: 20px;">Pressing Pro</h1>
-    <h2 style="text-align: center;">Connexion</h2>
+    /* 2. Style de la carte */
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* 3. Titres */
+    h1 {
+      text-align: center;
+      color: #2196F3;
+      margin-bottom: 5px;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    h2 {
+      text-align: center;
+      color: #64748b;
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+
+    /* 4. Champs de saisie */
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      background-color: #f8fafc;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2196F3;
+      background-color: #fff;
+      box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    }
+
+    /* 5. Bouton */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #1976D2;
+    }
+
+    /* 6. Message d'erreur (sera géré par ton JS) */
+    .error-msg {
+      color: #ef4444;
+      background: #fee2e2;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+      display: none; /* Caché par défaut */
+      border: 1px solid #fecaca;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>Pressing Pro</h1>
+    <h2>Accès Administration</h2>
+    
+    <div id="authError" class="error-msg">Identifiants incorrects. Veuillez réessayer.</div>
     
     <form id="loginForm" class="form-grid">
       <input type="email" id="email" placeholder="Email" required>
@@ -20,5 +119,6 @@
   </div>
 
   <script type="module" src="auth.js"></script>
+
 </body>
 </html>
