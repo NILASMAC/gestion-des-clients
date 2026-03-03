@@ -142,6 +142,55 @@
       margin-left: auto;
     }
 
+    /* --- FILTRES PAR MOIS --- */
+    .month-filters {
+      margin-bottom: 20px;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .month-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .month-btn {
+      padding: 8px 16px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    .month-btn:hover {
+      background: #e3f2fd;
+      border-color: #2196F3;
+    }
+
+    .month-btn.active {
+      background: #2196F3;
+      color: white;
+      border-color: #2196F3;
+    }
+
+    /* --- SÉPARATEURS DE MOIS --- */
+    .month-separator {
+      background: #f8fafc;
+      padding: 10px 15px;
+      margin: 20px 0 10px 0;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #2196F3;
+      border-left: 4px solid #2196F3;
+      font-size: 16px;
+    }
+
     /* --- STATISTIQUES AVANCÉES --- */
     .stats-avancees {
       display: grid;
@@ -585,6 +634,9 @@
         width: 100%;
         justify-content: center;
       }
+      .month-buttons {
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -616,7 +668,7 @@
 
         <div class="form-group">
           <label>Sexe</label>
-          <input type="text" id="age" placeholder="sexe" >
+          <input type="text" id="sexe" placeholder="sexe" >
         </div>
         
         <div class="form-group">
@@ -709,8 +761,8 @@
             <option value="Pantalon">👖 Pantalon</option>
             <option value="Pantalon">👖 Jogging</option>
             <option value="Costume">🤵 Costume</option>
-            <option value="Pantalon">Maillot</option>
-            <option value="Pantalon">polo</option>
+            <option value="Maillot">⚽ Maillot</option>
+            <option value="Polo">👕 Polo</option>
             <option value="Robe">👗 Robe</option>
             <option value="Jupe">👘 Jupe</option>
             <option value="Veste">🧥 Veste</option>
@@ -728,8 +780,6 @@
             <option value="Femme">👩 Femme</option>
             <option value="Enfant">🧒 Enfant</option>
             <option value="Bébé">👶 Bébé</option>
-            
-  
           </select>
           
           <input type="number" class="article-quantite" placeholder="Qté" min="1" value="1">
@@ -769,7 +819,7 @@
         
         <div class="checkbox-item">
           <input type="checkbox" id="expressAvecRepassage" value="Express avec repassage" data-prix="1500" data-kg="true" data-type="kg">
-          <label for="expressAvecRepassage">Express avec repassage <strong>1000 FCFA/kg</strong></label>
+          <label for="expressAvecRepassage">Express avec repassage <strong>1500 FCFA/kg</strong></label>
           <div class="kg-input-container" id="kg-expressAvecRepassage" style="display: none;">
             <input type="number" id="kg-input-expressAvecRepassage" placeholder="Nombre de kilos" step="0.1" min="0">
           </div>
@@ -828,6 +878,26 @@
         <button class="search-filter-btn" onclick="setSearchFilter('telephone')" id="filter-telephone">Téléphone</button>
       </div>
       <div class="search-results-count" id="searchResultsCount">0 résultats</div>
+    </div>
+    
+    <!-- Filtres par mois -->
+    <div class="month-filters">
+      <h3 style="margin-bottom: 10px; font-size: 16px;">📅 Filtrer par mois</h3>
+      <div class="month-buttons">
+        <button class="month-btn active" onclick="filtrerParMois('all')" id="month-all">Tous les mois</button>
+        <button class="month-btn" onclick="filtrerParMois('01')" id="month-01">Janvier</button>
+        <button class="month-btn" onclick="filtrerParMois('02')" id="month-02">Février</button>
+        <button class="month-btn" onclick="filtrerParMois('03')" id="month-03">Mars</button>
+        <button class="month-btn" onclick="filtrerParMois('04')" id="month-04">Avril</button>
+        <button class="month-btn" onclick="filtrerParMois('05')" id="month-05">Mai</button>
+        <button class="month-btn" onclick="filtrerParMois('06')" id="month-06">Juin</button>
+        <button class="month-btn" onclick="filtrerParMois('07')" id="month-07">Juillet</button>
+        <button class="month-btn" onclick="filtrerParMois('08')" id="month-08">Août</button>
+        <button class="month-btn" onclick="filtrerParMois('09')" id="month-09">Septembre</button>
+        <button class="month-btn" onclick="filtrerParMois('10')" id="month-10">Octobre</button>
+        <button class="month-btn" onclick="filtrerParMois('11')" id="month-11">Novembre</button>
+        <button class="month-btn" onclick="filtrerParMois('12')" id="month-12">Décembre</button>
+      </div>
     </div>
     
     <div class="table-container">
@@ -937,6 +1007,7 @@
   let toutesLesCommandes = [];
   let filtreActuel = 'all';
   let termeRecherche = '';
+  let moisFiltreActuel = 'all'; // Nouvelle variable pour le filtre par mois
 
   // Auth
   onAuthStateChanged(auth, (user) => {
@@ -1111,10 +1182,24 @@
     filtrerCommandes();
   };
 
+  // Nouvelle fonction pour filtrer par mois
+  window.filtrerParMois = function(mois) {
+    moisFiltreActuel = mois;
+    
+    // Mettre à jour les classes actives des boutons de mois
+    document.querySelectorAll('.month-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.getElementById(`month-${mois}`).classList.add('active');
+    
+    filtrerCommandes();
+  };
+
   window.filtrerCommandes = function() {
     termeRecherche = document.getElementById('searchInput').value.toLowerCase().trim();
     
-    const commandesFiltrees = toutesLesCommandes.filter(cmd => {
+    // D'abord filtrer par recherche
+    let commandesFiltrees = toutesLesCommandes.filter(cmd => {
       if (!termeRecherche) return true;
       
       const cmdData = cmd.data;
@@ -1133,14 +1218,24 @@
       }
     });
     
-    afficherCommandes(commandesFiltrees);
+    // Ensuite filtrer par mois si nécessaire
+    if (moisFiltreActuel !== 'all') {
+      commandesFiltrees = commandesFiltrees.filter(cmd => {
+        const dateAjout = new Date(cmd.data.dateAjout);
+        const mois = String(dateAjout.getMonth() + 1).padStart(2, '0');
+        return mois === moisFiltreActuel;
+      });
+    }
+    
+    afficherCommandesParMois(commandesFiltrees);
     
     // Mettre à jour le compteur
     document.getElementById('searchResultsCount').textContent = 
       `${commandesFiltrees.length} résultat${commandesFiltrees.length > 1 ? 's' : ''}`;
   };
 
-  function afficherCommandes(commandes) {
+  // Nouvelle fonction pour afficher les commandes groupées par mois
+  function afficherCommandesParMois(commandes) {
     const tbody = document.getElementById("listeCommandes");
     
     if (commandes.length === 0) {
@@ -1148,60 +1243,95 @@
       return;
     }
 
+    // Grouper les commandes par mois
+    const commandesParMois = {};
+    
+    commandes.forEach(({id, data: cmd}) => {
+      const dateAjout = new Date(cmd.dateAjout);
+      const moisKey = `${dateAjout.getFullYear()}-${String(dateAjout.getMonth() + 1).padStart(2, '0')}`;
+      const moisNom = dateAjout.toLocaleString('fr-FR', { month: 'long', year: 'numeric' });
+      
+      if (!commandesParMois[moisKey]) {
+        commandesParMois[moisKey] = {
+          nom: moisNom,
+          commandes: []
+        };
+      }
+      
+      commandesParMois[moisKey].commandes.push({id, data: cmd});
+    });
+
+    // Trier les mois par ordre chronologique inverse (plus récent d'abord)
+    const moisTries = Object.keys(commandesParMois).sort().reverse();
+    
     tbody.innerHTML = "";
 
-    commandes.forEach(({id, data: cmd}) => {
-      const row = document.createElement("tr");
-      const isLivre = cmd.statut === "Livré";
-
-      const articlesText = cmd.articles ? 
-        cmd.articles.map(a => `${a.quantite} × ${a.nom} (${a.type})`).join('<br>') : 
-        cmd.articlesText || "Non spécifié";
-
-      const servicesText = cmd.services ? 
-        cmd.services.map(s => {
-          if (s.kilos) return `${s.nom} (${s.kilos} kg)`;
-          return s.nom;
-        }).join('<br>') : 
-        cmd.typeLavage || "Non spécifié";
-
-      // Mettre en évidence le terme recherché
-      const highlightTerme = (text) => {
-        if (!termeRecherche || filtreActuel === 'all') return text;
-        const regex = new RegExp(`(${termeRecherche})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
-      };
-
-      row.innerHTML = `
-        <td>
-          <strong>${highlightTerme(cmd.nom)}</strong><br>
-          <small style="color: #666;">Âge: ${cmd.age || 'N/A'} ans</small>
-        </td>
-        <td>
-          <div>📞 ${highlightTerme(cmd.telephone)}</div>
-          <small style="color: #666;">📍 ${highlightTerme(cmd.quartier)}</small>
-        </td>
-        <td><small>${articlesText}</small></td>
-        <td><small>${servicesText}</small></td>
-        <td><strong>${cmd.montant.toLocaleString()} FCFA</strong></td>
-        <td style="color: ${isLivre ? '#4CAF50' : '#FF9800'}; font-weight: bold;">${cmd.statut}</td>
-        <td>
-          <button class="action-btn btn-wa" onclick='envoyerWhatsApp(${JSON.stringify(cmd).replace(/'/g, "\\'")})'>
-            💬 WA
-          </button>
-          <button class="action-btn btn-pdf" onclick='telechargerPDF(${JSON.stringify(cmd).replace(/'/g, "\\'")})'>
-            📄 PDF
-          </button>
-          <button class="action-btn btn-livre" onclick='livrerCommande("${id}")' ${isLivre ? 'disabled' : ''}>
-            ✅ LIVRÉ
-          </button>
-          <button class="action-btn btn-del" onclick='supprimerCommande("${id}")'>
-            🗑️
-          </button>
+    moisTries.forEach(moisKey => {
+      const moisData = commandesParMois[moisKey];
+      
+      // Ajouter une ligne de séparation pour le mois
+      const separatorRow = document.createElement('tr');
+      separatorRow.innerHTML = `
+        <td colspan="7" class="month-separator">
+          📅 ${moisData.nom.charAt(0).toUpperCase() + moisData.nom.slice(1)} (${moisData.commandes.length} commande${moisData.commandes.length > 1 ? 's' : ''})
         </td>
       `;
-      
-      tbody.appendChild(row);
+      tbody.appendChild(separatorRow);
+
+      // Ajouter les commandes de ce mois
+      moisData.commandes.forEach(({id, data: cmd}) => {
+        const row = document.createElement("tr");
+        const isLivre = cmd.statut === "Livré";
+
+        const articlesText = cmd.articles ? 
+          cmd.articles.map(a => `${a.quantite} × ${a.nom} (${a.type})`).join('<br>') : 
+          cmd.articlesText || "Non spécifié";
+
+        const servicesText = cmd.services ? 
+          cmd.services.map(s => {
+            if (s.kilos) return `${s.nom} (${s.kilos} kg)`;
+            return s.nom;
+          }).join('<br>') : 
+          cmd.typeLavage || "Non spécifié";
+
+        // Mettre en évidence le terme recherché
+        const highlightTerme = (text) => {
+          if (!termeRecherche || filtreActuel === 'all') return text;
+          const regex = new RegExp(`(${termeRecherche})`, 'gi');
+          return text.replace(regex, '<span class="highlight">$1</span>');
+        };
+
+        row.innerHTML = `
+          <td>
+            <strong>${highlightTerme(cmd.nom)}</strong><br>
+            <small style="color: #666;">Âge: ${cmd.age || 'N/A'} ans</small>
+          </td>
+          <td>
+            <div>📞 ${highlightTerme(cmd.telephone)}</div>
+            <small style="color: #666;">📍 ${highlightTerme(cmd.quartier)}</small>
+          </td>
+          <td><small>${articlesText}</small></td>
+          <td><small>${servicesText}</small></td>
+          <td><strong>${cmd.montant.toLocaleString()} FCFA</strong></td>
+          <td style="color: ${isLivre ? '#4CAF50' : '#FF9800'}; font-weight: bold;">${cmd.statut}</td>
+          <td>
+            <button class="action-btn btn-wa" onclick='envoyerWhatsApp(${JSON.stringify(cmd).replace(/'/g, "\\'")})'>
+              💬 WA
+            </button>
+            <button class="action-btn btn-pdf" onclick='telechargerPDF(${JSON.stringify(cmd).replace(/'/g, "\\'")})'>
+              📄 PDF
+            </button>
+            <button class="action-btn btn-livre" onclick='livrerCommande("${id}")' ${isLivre ? 'disabled' : ''}>
+              ✅ LIVRÉ
+            </button>
+            <button class="action-btn btn-del" onclick='supprimerCommande("${id}")'>
+              🗑️
+            </button>
+          </td>
+        `;
+        
+        tbody.appendChild(row);
+      });
     });
   }
 
